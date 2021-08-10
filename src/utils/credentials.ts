@@ -1,10 +1,9 @@
 import { readFile } from 'fs/promises';
-import { DB } from '../types';
+import { DB, Credential } from '../types';
 
-export async function readCredentials(): Promise<DB[]> {
-  const promise = await readFile('src/db.json', 'utf-8');
-  const db = JSON.parse(promise);
+export async function readCredentials(): Promise<Credential[]> {
+  const response = await readFile('src/db.json', 'utf-8');
+  const db: DB = JSON.parse(response);
   const credentials = db.credentials;
-  console.log(credentials);
   return credentials;
 }
