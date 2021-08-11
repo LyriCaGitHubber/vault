@@ -1,6 +1,7 @@
 import express, { response } from 'express';
 import {
   addCredential,
+  deleteCredential,
   getCredential,
   readCredentials,
 } from './utils/credentials';
@@ -40,6 +41,16 @@ app.post('/api/credentials', async (req, res) => {
     res.status(200).json(req.body);
   } catch (error) {
     res.status(500).send('Cannot find credentials');
+  }
+});
+
+app.delete('/api/credentials/:service', async (request, response) => {
+  const { service } = request.params;
+  try {
+    await deleteCredential(service);
+    response.status(200).send('Deleted');
+  } catch (error) {
+    console.error(error);
   }
 });
 

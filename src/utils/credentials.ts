@@ -42,4 +42,9 @@ export async function deleteCredential(service: string): Promise<void> {
   const newCredentials = credentials.filter(
     (credential) => credential.service !== service
   );
+  const newDB: DB = {
+    credentials: newCredentials,
+  };
+  const newJSON = JSON.stringify(newDB, null, 2);
+  return writeFile('src/db.json', newJSON, 'utf-8');
 }
