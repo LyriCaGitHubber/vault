@@ -1,3 +1,4 @@
+import { writeFile } from 'fs/promises';
 import { readFile } from 'fs/promises';
 import { DB, Credential } from '../types';
 
@@ -10,6 +11,7 @@ export async function readCredentials(): Promise<Credential[]> {
 
 export async function getCredential(service: string): Promise<Credential> {
   const credentials = await readCredentials();
+  console.log(credentials);
   const credential = credentials.find(
     (credential) => credential.service === service
   );
@@ -19,4 +21,18 @@ export async function getCredential(service: string): Promise<Credential> {
   }
 
   return credential;
+}
+
+export async function addCredential(credential: Credential): Promise<void> {
+  //get existing credentials
+  const credentials = await readCredentials();
+  //add argument to existing credentials
+  const newCredentials = [...credentials, credential];
+  // create new DB
+  const newDB: DB = {
+    credentials: newCredentials,
+  };
+  const newJSON = JSON.stringify(newDB);
+  //overwrite DB using writeFile
+  return writeFile('src/db.json', newJSON, 'utf-8');
 }
