@@ -32,7 +32,7 @@ export async function addCredential(credential: Credential): Promise<void> {
   const newDB: DB = {
     credentials: newCredentials,
   };
-  const newJSON = JSON.stringify(newDB);
+  const newJSON = JSON.stringify(newDB, null, 2);
   //overwrite DB using writeFile
   return writeFile('src/db.json', newJSON, 'utf-8');
 }
