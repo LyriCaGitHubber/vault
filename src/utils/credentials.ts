@@ -36,3 +36,10 @@ export async function addCredential(credential: Credential): Promise<void> {
   //overwrite DB using writeFile
   return writeFile('src/db.json', newJSON, 'utf-8');
 }
+
+export async function deleteCredential(service: string): Promise<void> {
+  const credentials = await readCredentials();
+  const newCredentials = credentials.filter(
+    (credential) => credential.service !== service
+  );
+}
