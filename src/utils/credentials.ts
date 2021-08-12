@@ -1,6 +1,6 @@
 import { writeFile, readFile } from 'fs/promises';
 import { DB, Credential } from '../types';
-import { TripleDES } from 'crypto-js';
+import { encryptCredential } from './crypto';
 
 export async function readCredentials(): Promise<Credential[]> {
   const response = await readFile('src/db.json', 'utf-8');
@@ -24,17 +24,16 @@ export async function getCredential(service: string): Promise<Credential> {
 }
 
 export async function addCredential(credential: Credential): Promise<void> {
-  //get existing credentials
   const credentials = await readCredentials();
-  //add argument to existing credentials
-  const newCredentials = [...credentials, credential];
+
+  const newCredentials = [...credentials, encryptCredential(credential)];
   // create new DB
   const newDB: DB = {
     credentials: newCredentials,
   };
   const newJSON = JSON.stringify(newDB, null, 2);
-  //overwrite DB using writeFile
-  return writeFile('src/db.json', newJSON, 'utf-8');
+
+  await writeFile('src/db.json', newJSON, 'utf-8');
 }
 
 export async function deleteCredential(service: string): Promise<void> {
