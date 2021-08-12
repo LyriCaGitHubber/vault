@@ -4,6 +4,7 @@ import {
   deleteCredential,
   getCredential,
   readCredentials,
+  updateCredential,
 } from './utils/credentials';
 
 const app = express();
@@ -51,6 +52,18 @@ app.delete('/api/credentials/:service', async (request, response) => {
     response.status(200).send('Deleted');
   } catch (error) {
     console.error(error);
+  }
+});
+
+app.put('/api/credentials/:service', async (request, response) => {
+  const { service } = request.params;
+  const credential: Credential = request.body;
+  try {
+    await updateCredential(service, credential);
+    response.status(200).json(credential);
+  } catch (error) {
+    console.error();
+    response.status(404).send(`Could not find service ${service}`);
   }
 });
 
