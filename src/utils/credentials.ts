@@ -1,6 +1,6 @@
-import { writeFile } from 'fs/promises';
-import { readFile } from 'fs/promises';
+import { writeFile, readFile } from 'fs/promises';
 import { DB, Credential } from '../types';
+import { TripleDES } from 'crypto-js';
 
 export async function readCredentials(): Promise<Credential[]> {
   const response = await readFile('src/db.json', 'utf-8');
