@@ -4,6 +4,16 @@
       "service": "Google",
       "username": "Patrick",
       "password": "DefaultPassword"
+    },
+    {
+      "service": "ICQ",
+      "username": "Patrick",
+      "password": "DefaultPassword"
+    },
+    {
+      "service": "Soundcloud",
+      "username": "Patrick",
+      "password": "DefaultPassword"
     }
   ]
 }
