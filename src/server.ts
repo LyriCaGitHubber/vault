@@ -1,4 +1,6 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 import {
   addCredential,
   deleteCredential,
@@ -6,6 +8,8 @@ import {
   readCredentials,
   updateCredential,
 } from './utils/credentials';
+import type { Credential } from './types';
+import { validateMasterPassword } from './utils/validation';
 
 const app = express();
 const port = 3000;
@@ -23,12 +27,19 @@ app.get('/api/credentials', async (_req, res) => {
 
 app.get('/api/credentials/:service', async (request, response) => {
   const { service } = request.params;
+  const masterPassword = request.headers.authorization;
+  if (!masterPassword) {
+    response.status(400).send('Authorization header missing');
+    return;
+  } else if (!(await validateMasterPassword(masterPassword))) {
+    response.status(401).send('Unauthorized request');
+    return;
+  }
   try {
-    const credential = await getCredential(service);
+    const credential = await getCredential(service, masterPassword);
     response.status(200).json(credential);
   } catch (error) {
     console.error(error);
-    response.status(404).send(`Could not find service: ${service}`);
   }
 });
 
@@ -37,12 +48,17 @@ app.get('/', (_req, res) => {
 });
 
 app.post('/api/credentials', async (req, res) => {
-  try {
-    await addCredential(req.body);
-    res.status(200).json(req.body);
-  } catch (error) {
-    res.status(500).send('Cannot find credentials');
+  const credential: Credential = req.body;
+  const masterPassword = req.headers.authorization;
+  if (!masterPassword) {
+    res.status(400).send('Authorization header missing');
+    return;
+  } else if (!validateMasterPassword(masterPassword)) {
+    res.status(401).send('Unauthorized request');
+    return;
   }
+  await addCredential(credential, masterPassword);
+  return res.status(200).send(credential);
 });
 
 app.delete('/api/credentials/:service', async (request, response) => {
