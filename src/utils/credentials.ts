@@ -1,11 +1,16 @@
-import { writeFile, readFile } from 'fs/promises';
-import type { DB, Credential } from '../types';
+import type { Credential } from '../types';
 import { encryptCredential, decryptCredential } from './crypto';
+import { getCredentialCollection } from './database';
+import { createListing, findCredential, delCredential } from './database';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export async function readCredentials(): Promise<Credential[]> {
-  const response = await readFile('src/db.json', 'utf-8');
-  const db: DB = JSON.parse(response);
-  const credentials = db.credentials;
+export async function readCredentials(key: string): Promise<Credential[]> {
+  const credentialCollection = getCredentialCollection();
+  const encryptedCredentials = await credentialCollection.find().toArray();
+  const credentials = encryptedCredentials.map((credential) =>
+    decryptCredential(credential, key)
+  );
   return credentials;
 }
 
@@ -13,11 +18,7 @@ export async function getCredential(
   service: string,
   key: string
 ): Promise<Credential> {
-  const credentials = await readCredentials();
-  console.log(credentials);
-  const credential = credentials.find(
-    (credential) => credential.service === service
-  );
+  const credential = await findCredential(service);
 
   if (!credential) {
     throw new Error(`The service ${service} was not found.`);
@@ -32,42 +33,33 @@ export async function addCredential(
   credential: Credential,
   key: string
 ): Promise<void> {
-  const credentials = await readCredentials();
+  const encryptedCredential = encryptCredential(credential, key);
 
-  const newCredentials = [...credentials, encryptCredential(credential, key)];
-  // create new DB
-  const newDB: DB = {
-    credentials: newCredentials,
-  };
-  const newJSON = JSON.stringify(newDB, null, 2);
+  if (!process.env.MONGODB_URL) {
+    throw new Error('No MONGODB_URL dotenv variable');
+  }
 
-  await writeFile('src/db.json', newJSON, 'utf-8');
+  await createListing(encryptedCredential);
 }
 
 export async function deleteCredential(service: string): Promise<void> {
-  const credentials = await readCredentials();
-  const newCredentials = credentials.filter(
-    (credential) => credential.service !== service
-  );
-  const newDB: DB = {
-    credentials: newCredentials,
-  };
-  const newJSON = JSON.stringify(newDB, null, 2);
-  return writeFile('src/db.json', newJSON, 'utf-8');
+  if (!process.env.MONGODB_URL) {
+    throw new Error('No MONGODB_URL dotenv variable');
+  }
+  await delCredential(service);
 }
 
 export async function updateCredential(
   service: string,
-  credential: Credential
+  credential: Credential,
+  key: string
 ): Promise<void> {
-  // get all Credentials
-  const credentials = await readCredentials();
-  // modify one
-  const oldDB = credentials.filter(
-    (credential) => credential.service !== service
+  const credentialCollection = getCredentialCollection();
+
+  const encryptedCredential = encryptCredential(credential, key);
+
+  await credentialCollection.updateOne(
+    { service },
+    { $set: encryptedCredential }
   );
-  const newDB: DB = { credentials: [...oldDB, credential] };
-  //overwrite DB
-  const newJSON = JSON.stringify(newDB, null, 2);
-  await writeFile('src/db.json', newJSON, 'utf-8');
 }
