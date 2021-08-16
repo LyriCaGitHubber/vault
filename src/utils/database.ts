@@ -1,5 +1,6 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Credential } from '../types';
+import { decryptCredential } from './crypto';
 
 let client: MongoClient;
 
@@ -16,9 +17,20 @@ export function getCredentialCollection(): Collection<Credential> {
   return getCollection<Credential>('credentials');
 }
 
+// CRUD functions
+
 export async function createListing(credential: Credential): Promise<void> {
   const credentialCollection = getCredentialCollection();
   credentialCollection.insertOne(credential);
+}
+
+export async function readCredentials(key: string): Promise<Credential[]> {
+  const credentialCollection = getCredentialCollection();
+  const encryptedCredentials = await credentialCollection.find().toArray();
+  const credentials = encryptedCredentials.map((credential) =>
+    decryptCredential(credential, key)
+  );
+  return credentials;
 }
 
 export async function findCredential(
@@ -29,7 +41,7 @@ export async function findCredential(
   return service;
 }
 
-export async function deleteCredential(name: string): Promise<void> {
+export async function delCredential(name: string): Promise<void> {
   const credentialCollection = getCredentialCollection();
   await credentialCollection.deleteOne({ service: name });
 }
