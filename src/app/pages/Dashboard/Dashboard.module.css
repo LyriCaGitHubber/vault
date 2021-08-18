@@ -1,0 +1,32 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  background: var(--col-primary);
+  color: var(--fc-global);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 70%;
+  margin: 0 auto 0 auto;
+}
+
+.dashboard__header {
+  margin: 0;
+  text-align: center;
+  background-color: var(--col-secondary);
+  padding: 0.5em 0 0.5em 0;
+}
+
+.dashboard__masterpassword::placeholder {
+  text-transform: uppercase;
+}
+
+span {
+  color: var(--col-cta);
+}
