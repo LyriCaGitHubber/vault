@@ -3,11 +3,7 @@ import styles from './App.module.css';
 import Dashboard from './pages/Dashboard/Dashboard';
 
 function App(): JSX.Element {
-  return (
-    <>
-      <Dashboard />
-    </>
-  );
+  return <Dashboard />;
 }
 
 export default App;
