@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Dashboard.module.css';
 import { Credential } from '../../../types';
 import CredentialCards from '../../components/CredentialCards';
-import AddCredential from '../../components/AddCredential';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard(): JSX.Element {
   const [credentials, setCredentials] = useState<Credential[]>([]);
@@ -26,7 +26,7 @@ export default function Dashboard(): JSX.Element {
   }, [masterPassword]);
 
   return (
-    <>
+    <div className={styles.container}>
       <header className={styles.dashboard__header}>
         <h1 className={styles.dashboard__headline}>
           <span>V</span>ault
@@ -36,7 +36,7 @@ export default function Dashboard(): JSX.Element {
         <p>Welcome to your personal vault</p>
         <input
           className={styles.dashboard__masterpassword}
-          type="text"
+          type="password"
           placeholder="Masterpassword"
           value={masterPassword}
           onChange={(event) => {
@@ -51,6 +51,17 @@ export default function Dashboard(): JSX.Element {
             ))}
         </div>
       </main>
-    </>
+      <footer>
+        <Link to="/search">
+          <img
+            className={styles.searchButton}
+            src="src/assets/searchButton.svg"
+          />
+        </Link>
+        <Link to="/add">
+          <img className={styles.addButton} src="src/assets/addButton.svg" />
+        </Link>
+      </footer>
+    </div>
   );
 }
