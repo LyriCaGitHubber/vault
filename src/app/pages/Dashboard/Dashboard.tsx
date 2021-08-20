@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Dashboard.module.css';
 import { Credential } from '../../../types';
+import CredentialCards from '../../components/CredentialCards';
+import AddCredential from '../../components/AddCredential';
 
 export default function Dashboard(): JSX.Element {
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const [masterPassword, setMasterpassword] = useState('');
 
+  async function fetchCredentials() {
+    const response = await fetch('/api/credentials', {
+      headers: {
+        Authorization: masterPassword,
+      },
+    });
+    const credentials = await response.json();
+
+    setCredentials(credentials);
+  }
+
   useEffect(() => {
-    async function fetchCredentials() {
-      const response = await fetch('/api/credentials', {
-        headers: {
-          Authorization: masterPassword,
-        },
-      });
-      const credentials = await response.json();
-      if (!masterPassword) {
-        setCredentials([]);
-      }
-      setCredentials(credentials);
+    if (!masterPassword) {
+      setCredentials([]);
     }
-    fetchCredentials();
   }, [masterPassword]);
 
   return (
@@ -40,14 +43,11 @@ export default function Dashboard(): JSX.Element {
             setMasterpassword(event.target.value);
           }}
         />
+        <button onClick={fetchCredentials}>Log in</button>
         <div className="passwords">
           {credentials.length !== 0 &&
             credentials.map((credential) => (
-              <div>
-                <p>{credential.service}</p>
-                <p>{credential.username}</p>
-                <p>{credential.password}</p>
-              </div>
+              <CredentialCards props={credential} />
             ))}
         </div>
       </main>
