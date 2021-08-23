@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Password from './pages/Password/Password';
 import AddCredentials from './pages/AddCredentials/AddCredentials';
+import Search from './pages/Search';
 
 function App(): JSX.Element {
   return (
@@ -11,8 +12,11 @@ function App(): JSX.Element {
         <Route path="/password/:service/:name">
           <Password />
         </Route>
-        <Route path="/add">
+        <Route path="/credential/add">
           <AddCredentials />
+        </Route>
+        <Route path="/search">
+          <Search />
         </Route>
         <Route exact path="/">
           <Dashboard />
