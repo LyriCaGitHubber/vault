@@ -58,7 +58,7 @@ export default function Dashboard(): JSX.Element {
             src="src/assets/searchButton.svg"
           />
         </Link>
-        <Link to="/add">
+        <Link to="/credential/add">
           <img className={styles.addButton} src="src/assets/addButton.svg" />
         </Link>
       </footer>

@@ -16,7 +16,7 @@ export default function AddCredentials(): JSX.Element {
       masterPassword: masterPassword,
     };
 
-    const sendCredential = await fetch('/api/credentials', {
+    await fetch('/api/credentials', {
       method: 'POST',
       headers: {
         Authorization: masterPassword,
@@ -28,7 +28,7 @@ export default function AddCredentials(): JSX.Element {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(event) => handleSubmit(event)}>
         <p>
           <label htmlFor="service-name">Please enter service name</label>
           <input
@@ -39,6 +39,7 @@ export default function AddCredentials(): JSX.Element {
               console.log(e.target.value);
               setServiceName(e.target.value);
             }}
+            required
           />
         </p>
         <p>
@@ -50,6 +51,7 @@ export default function AddCredentials(): JSX.Element {
             onChange={(e) => {
               setUsername(e.target.value);
             }}
+            required
           />
         </p>
         <p>
@@ -61,6 +63,7 @@ export default function AddCredentials(): JSX.Element {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            required
           />
         </p>
         <p>
@@ -74,9 +77,10 @@ export default function AddCredentials(): JSX.Element {
             onChange={(e) => {
               setMasterPassword(e.target.value);
             }}
+            required
           />
         </p>
-        <button type="submit">Abschicken</button>
+        <button type="submit">Add credential</button>
       </form>
     </>
   );
