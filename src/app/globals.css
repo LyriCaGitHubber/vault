@@ -13,7 +13,8 @@
   --fc-global: white;
   --col-primary: #464647;
   --col-secondary: #0f0f0f;
-  --col-cta: #b80b1e;
+  --col-cta: rgb(184, 11, 30);
+  --col-cta-trans: rgba(184, 11, 30, 0.3);
 }
 
 body {

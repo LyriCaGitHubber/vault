@@ -7,7 +7,12 @@ body {
   background: var(--col-primary);
   color: var(--fc-global);
 }
-
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 main {
   display: flex;
   flex-direction: column;
@@ -24,9 +29,23 @@ main {
 }
 
 .dashboard__masterpassword::placeholder {
+  text-align: center;
   text-transform: uppercase;
 }
 
 span {
   color: var(--col-cta);
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addButton {
+  width: 5em;
+}
+
+.searchButton {
+  width: 5em;
 }
