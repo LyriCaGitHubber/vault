@@ -15,7 +15,6 @@ export default function AddCredentials(): JSX.Element {
       service: serviceName,
       username: username,
       password: password,
-      masterPassword: masterPassword,
     };
 
     await fetch('/api/credentials', {

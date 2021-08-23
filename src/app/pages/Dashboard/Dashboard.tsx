@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Dashboard.module.css';
-import { Credential } from '../../../types';
+import type { Credential } from '../../../types';
 import CredentialCards from '../../components/CredentialCards';
 import { Link } from 'react-router-dom';
 
@@ -61,7 +61,7 @@ export default function Dashboard(): JSX.Element {
             credentials.map((credential) => (
               <CredentialCards
                 key={credential._id}
-                props={credential}
+                credentialData={credential}
                 onDeleteClick={handleDeleteClick}
               />
             ))}

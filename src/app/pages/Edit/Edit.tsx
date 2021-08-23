@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
-import { Credential } from '../../../types';
+import type { Credential } from '../../../types';
 import styles from './Edit.module.css';
 
 export default function Edit(): JSX.Element {
