@@ -28,7 +28,12 @@ export default function Search(): JSX.Element {
     <main className={styles.container}>
       <h1>Vault</h1>
       {credential ? (
-        <CredentialCards props={credential} />
+        <CredentialCards
+          props={credential}
+          onDeleteClick={() => {
+            service;
+          }}
+        />
       ) : (
         <form
           className={styles.container}
