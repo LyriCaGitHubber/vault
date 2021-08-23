@@ -1,14 +1,14 @@
 import React from 'react';
-import { Credential } from '../../types';
+import type { Credential } from '../../types';
 import styles from './CredentialCards.module.css';
 
 type CredentialCardProps = {
-  props: Credential;
+  credentialData: Credential;
   onDeleteClick: (service: string) => void;
 };
 
 export default function CredentialCards({
-  props,
+  credentialData,
   onDeleteClick,
 }: CredentialCardProps): JSX.Element {
   function checkValues(value: string) {
@@ -21,10 +21,12 @@ export default function CredentialCards({
   return (
     <>
       <section className={styles.credentialCard}>
-        <p>{`Service : ${checkValues(props.service)}`}</p>
-        <p>{`Username: ${checkValues(props.username)}`}</p>
-        <p>{`Password: ${checkValues(props.password)}`}</p>
-        <button onClick={() => onDeleteClick(props.service)}>❌</button>
+        <p>{`Service : ${checkValues(credentialData.service)}`}</p>
+        <p>{`Username: ${checkValues(credentialData.username)}`}</p>
+        <p>{`Password: ${checkValues(credentialData.password)}`}</p>
+        <button onClick={() => onDeleteClick(credentialData.service)}>
+          ❌
+        </button>
       </section>
     </>
   );

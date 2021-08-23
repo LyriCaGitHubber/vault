@@ -29,7 +29,7 @@ export default function Search(): JSX.Element {
       <h1>Vault</h1>
       {credential ? (
         <CredentialCards
-          props={credential}
+          credentialData={credential}
           onDeleteClick={() => {
             service;
           }}
