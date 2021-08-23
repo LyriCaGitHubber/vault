@@ -4,12 +4,16 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Password from './pages/Password/Password';
 import AddCredentials from './pages/AddCredentials/AddCredentials';
 import Search from './pages/Search';
+import Edit from './pages/Edit/Edit';
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/password/:service/:name">
+        <Route path="/credential/:service/edit">
+          <Edit />
+        </Route>
+        <Route path="/password/:service">
           <Password />
         </Route>
         <Route path="/credential/add">
