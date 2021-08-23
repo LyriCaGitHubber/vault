@@ -28,7 +28,7 @@ export default function Search(): JSX.Element {
     <main className={styles.container}>
       <h1>Vault</h1>
       {credential ? (
-        <CredentialCards credentialData={credential} />
+        <CredentialCards props={credential} />
       ) : (
         <form
           className={styles.container}
